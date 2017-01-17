@@ -67,4 +67,13 @@ function Cell(x, y) {
 			return undefined;
 		}
 	};
+
+	this.highlight = function() {
+		var xPixel = x * cellSize;
+		var yPixel = y * cellSize;
+
+		noStroke();
+		fill(255, 255, 0, 150);
+		rect(xPixel, yPixel, cellSize, cellSize);
+	};
 }

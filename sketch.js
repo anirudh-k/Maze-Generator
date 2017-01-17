@@ -7,6 +7,11 @@ var cellSize = 40;
 // array that stores all the Cells in the maze
 var grid = [];
 
+// keeps track of the cells we have visited
+// by using a stack, this generator uses the depth-first-search algorithm
+// if this were a queue, the maze would be generated with breadth-first-search
+var stack = [];
+
 // Cell that is being currently visited
 var current;
 
@@ -49,18 +54,26 @@ function draw() {
   	// visit the first Cell in the grid
   	current.visited = true;
 
+  	// identify which cell the generator is currently on
+  	current.highlight();
+
   	// STEP 1
   	// check if any of the current Cell's neighbors have not been visited
   	// if there are any unvisited neighbors, picks one and assigns to next
   	var next = current.checkNeighbors(grid, getIndex);
 
   	if (next) {
+  		// STEP 2
+  		stack.push(current);
+
   		// STEP 3
   		removeWalls(current, next);
 
   		// STEP 4
   		current = next;
   		next.visited = true;
+  	} else if (stack.length > 0) {
+  		current = stack.pop();
   	}
 }
 
