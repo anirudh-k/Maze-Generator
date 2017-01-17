@@ -3,55 +3,68 @@
 function Cell(x, y) {
 	this.x = x;
 	this.y = y;
+	// [top, right, bottom, left]
 	this.walls = [true, true, true, true];
-	this.top = this.walls[0];
-	this.right = this.walls[1];
-	this.bottom = this.walls[2];
-	this.left = this.walls[3];
 	this.visited = false;
 
 	// takes in the pixel size of the Cell (which is a square)
-	this.show = function(cellSize) {
+	this.show = function() {
 		var xPixel = x * cellSize;
 		var yPixel = y * cellSize;
 		stroke(255);
 
-		if (this.top) {
+		if (this.walls[0]) {
 			// top-side border
 			line(xPixel, yPixel, xPixel + cellSize, yPixel);
 		}
-		if (this.left) {
-			// left-side border
-			line(xPixel, yPixel, xPixel, yPixel + cellSize);
-		}
-		if (this.bottom) {
-			// bottom-side border
-			line(xPixel, yPixel + cellSize, xPixel + cellSize, yPixel + cellSize);
-		}
-		if (this.right) {
+		if (this.walls[1]) {
 			// right-side border
 			line(xPixel + cellSize, yPixel, xPixel + cellSize, yPixel + cellSize);
 		}
+		if (this.walls[2]) {
+			// bottom-side border
+			line(xPixel, yPixel + cellSize, xPixel + cellSize, yPixel + cellSize);
+		}
+		if (this.walls[3]) {
+			// left-side border
+			line(xPixel, yPixel, xPixel, yPixel + cellSize);
+		}
 
+		// colors the Cell purple if it has been visited
 		if (this.visited) {
+			noStroke();
 			fill(255, 0, 255, 100);
 			rect(xPixel, yPixel, cellSize, cellSize);
 		}
 	};
 
-	this.checkNeighbors = function(grid, getIndex) {
+	// determines if the 
+	this.checkNeighbors = function() {
 		var neighbors = [];
-		var visitedNeighbors = [];
+		var unvisitedNeighbors = [];
 
+		// add cells to neighbors array
 		neighbors.push(grid[getIndex(x, y - 1)]);
+		neighbors.push(grid[getIndex(x + 1, y)]);
 		neighbors.push(grid[getIndex(x, y + 1)]);
 		neighbors.push(grid[getIndex(x - 1, y)]);
-		neighbors.push([getIndex(x + 1, y)]);
 
-		for (var cell in neighbors) {
-			if (!cell.visited) {
-				visitedNeighbors.push(cell);
+		// iterate over neighbors
+		for (let c of neighbors) {
+			// if the cell is defined and it has not been visited...
+			if (c && !c.visited) {
+				/// ... add it to the unvisited neighbors array
+				unvisitedNeighbors.push(c);
 			}
+		}
+
+		// if there are any unvisited neighbors...
+		if (unvisitedNeighbors.length > 0) {
+			// ... select one at random and return it
+			var r = floor(random(0, unvisitedNeighbors.length));
+			return unvisitedNeighbors[r];
+		} else {
+			return undefined;
 		}
 	};
 }
