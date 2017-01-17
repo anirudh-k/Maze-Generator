@@ -12,6 +12,8 @@ var grid = [];
 // if this were a queue, the maze would be generated with breadth-first-search
 var stack = [];
 
+// var solution = [];
+
 // Cell that is being currently visited
 var current;
 
@@ -57,6 +59,10 @@ function draw() {
   	// identify which cell the generator is currently on
   	current.highlight();
 
+  	// if (current.x === rows && current.y === cols) {
+  	// 	solution = stack.slice();
+  	// }
+
   	// STEP 1
   	// check if any of the current Cell's neighbors have not been visited
   	// if there are any unvisited neighbors, picks one and assigns to next
@@ -74,7 +80,15 @@ function draw() {
   		next.visited = true;
   	} else if (stack.length > 0) {
   		current = stack.pop();
+  	} else {
+  		// playerMovement();
   	}
+
+  	// for (let c of solution) {
+  	// 	noStroke();
+  	// 	fill(0, 0, 255);
+  	// 	rect(c.x * cellSize, c.y * cellSize, cellSize, cellSize);
+  	// }
 }
 
 // given a Cell's x and y position, returns its index in the grid array
@@ -115,8 +129,3 @@ function removeWalls(c1, c2) {
 		c2.walls[0] = false;
 	}
 }
-
-
-
-
-
